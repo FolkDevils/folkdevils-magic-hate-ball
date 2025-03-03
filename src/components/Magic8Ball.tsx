@@ -4,9 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import gsap from "gsap";
+
+// Define a custom interface for the GLTF result.
+interface GLTFResult {
+  scene: THREE.Scene;
+  scenes: THREE.Scene[];
+  animations: THREE.AnimationClip[];
+  cameras: THREE.Camera[];
+  asset: { version: string; [key: string]: any };
+}
 
 const Magic8Ball: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -20,16 +28,16 @@ const Magic8Ball: React.FC = () => {
   const ballRef = useRef<THREE.Object3D | null>(null); // Entire ball
   const dieRef = useRef<THREE.Object3D | null>(null);  // The die with the answer texture
 
-  // Manual Orientation Controls (setters renamed to indicate they're unused)
-  const [eulerX, _setEulerX] = useState(75);
-  const [eulerY, _setEulerY] = useState(340);
-  const [eulerZ, _setEulerZ] = useState(0);
+  // Manual Orientation Controls: we only need the value.
+  const [eulerX] = useState(75);
+  const [eulerY] = useState(340);
+  const [eulerZ] = useState(0);
 
   // State for the question input
   const [question, setQuestion] = useState("");
 
   // Loader helper functions with explicit types
-  const loadModel = (url: string): Promise<GLTF> =>
+  const loadModel = (url: string): Promise<GLTFResult> =>
     new Promise((resolve, reject) => {
       new GLTFLoader().load(url, resolve, undefined, reject);
     });
@@ -161,7 +169,7 @@ const Magic8Ball: React.FC = () => {
     if (!sceneRef.current) return;
     const scene = sceneRef.current;
 
-    const modelData: GLTF = await loadModel("/models/magic8ball2.glb");
+    const modelData: GLTFResult = await loadModel("/models/magic8ball2.glb");
     const topTexture: THREE.Texture = await loadTexture("/textures/magic8ball-top.jpg");
     const bottomTexture: THREE.Texture = await loadTexture("/textures/magic8ball-bottom.jpg");
     bottomTexture.colorSpace = THREE.SRGBColorSpace;
@@ -175,7 +183,7 @@ const Magic8Ball: React.FC = () => {
     ballRef.current = ball; // Save entire ball reference
 
     // Assume ball.children[7] is the die that shows the answers.
-    const die = ball.children[7];
+    const die = ball.children[7] as THREE.Mesh;
     die.position.y = -0.635;
     die.rotation.y = THREE.MathUtils.degToRad(55);
     die.rotation.x = THREE.MathUtils.degToRad(40);
@@ -186,9 +194,10 @@ const Magic8Ball: React.FC = () => {
       dieRef.current.quaternion.copy(initialOrientation);
     }
 
-    const windowChild = ball.children[4];
+    const windowChild = ball.children[4] as THREE.Mesh;
 
-    ball.children[0].material = new THREE.MeshStandardMaterial({
+    // Cast children to THREE.Mesh before assigning material.
+    (ball.children[0] as THREE.Mesh).material = new THREE.MeshStandardMaterial({
       fog: false,
       envMap: envMap,
       envMapIntensity: 0.1,
@@ -197,7 +206,7 @@ const Magic8Ball: React.FC = () => {
       side: THREE.DoubleSide,
     });
 
-    ball.children[1].material = new THREE.MeshStandardMaterial({
+    (ball.children[1] as THREE.Mesh).material = new THREE.MeshStandardMaterial({
       fog: false,
       envMap: envMap,
       envMapIntensity: 0.1,
@@ -215,7 +224,8 @@ const Magic8Ball: React.FC = () => {
       transparent: true,
     });
 
-    die.material = new THREE.MeshStandardMaterial({
+    // Cast die as THREE.Mesh to set material.
+    (die as THREE.Mesh).material = new THREE.MeshStandardMaterial({
       map: dieTexture,
       side: THREE.DoubleSide,
     });
@@ -232,10 +242,10 @@ const Magic8Ball: React.FC = () => {
       side: THREE.DoubleSide,
     });
 
-    ball.children[6].material = flatBlackMaterial;
-    ball.children[2].material = shinyBlackMaterial;
-    ball.children[3].material = shinyBlackMaterial;
-    ball.children[5].material = shinyBlackMaterial;
+    (ball.children[6] as THREE.Mesh).material = flatBlackMaterial;
+    (ball.children[2] as THREE.Mesh).material = shinyBlackMaterial;
+    (ball.children[3] as THREE.Mesh).material = shinyBlackMaterial;
+    (ball.children[5] as THREE.Mesh).material = shinyBlackMaterial;
 
     // Set initial rotation for the entire ball.
     ball.rotation.x = THREE.MathUtils.degToRad(90);
@@ -292,7 +302,7 @@ const Magic8Ball: React.FC = () => {
       repeat: 1,
       ease: "power2.inOut",
     });
-    gsap.to(dieRef.current.position, {
+    gsap.to((dieRef.current as THREE.Mesh).position, {
       duration: 1,
       y: -0.55,
       yoyo: true,
