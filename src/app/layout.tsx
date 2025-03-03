@@ -2,8 +2,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Tawind Test',
-  description: 'A Next.js project with Tailwind CSS',
+  title: 'Magic Hate Ball',
+  description: 'Ask me anything',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
