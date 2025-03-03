@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import gsap from "gsap";
 
@@ -19,16 +20,16 @@ const Magic8Ball: React.FC = () => {
   const ballRef = useRef<THREE.Object3D | null>(null); // Entire ball
   const dieRef = useRef<THREE.Object3D | null>(null);  // The die with the answer texture
 
-  // Manual Orientation Controls: one set only.
-  const [eulerX, setEulerX] = useState(75);
-  const [eulerY, setEulerY] = useState(340);
-  const [eulerZ, setEulerZ] = useState(0);
+  // Manual Orientation Controls (setters renamed to indicate they're unused)
+  const [eulerX, _setEulerX] = useState(75);
+  const [eulerY, _setEulerY] = useState(340);
+  const [eulerZ, _setEulerZ] = useState(0);
 
   // State for the question input
   const [question, setQuestion] = useState("");
 
-  // Loader helper functions
-  const loadModel = (url: string): Promise<any> =>
+  // Loader helper functions with explicit types
+  const loadModel = (url: string): Promise<GLTF> =>
     new Promise((resolve, reject) => {
       new GLTFLoader().load(url, resolve, undefined, reject);
     });
@@ -36,7 +37,7 @@ const Magic8Ball: React.FC = () => {
     new Promise((resolve, reject) => {
       new THREE.TextureLoader().load(url, resolve, undefined, reject);
     });
-  const loadEnv = (url: string): Promise<any> =>
+  const loadEnv = (url: string): Promise<THREE.Texture> =>
     new Promise((resolve, reject) => {
       new RGBELoader().load(url, resolve, undefined, reject);
     });
@@ -52,7 +53,6 @@ const Magic8Ball: React.FC = () => {
 
   // Define valid orientations for the die.
   const validOrientations: THREE.Quaternion[] = [
-    // ... (your list of valid orientations remains unchanged)
     new THREE.Quaternion().setFromEuler(
       new THREE.Euler(
         THREE.MathUtils.degToRad(75),
@@ -161,14 +161,14 @@ const Magic8Ball: React.FC = () => {
     if (!sceneRef.current) return;
     const scene = sceneRef.current;
 
-    const modelData: any = await loadModel("/models/magic8ball2.glb");
-    const topTexture = await loadTexture("/textures/magic8ball-top.jpg");
-    const bottomTexture = await loadTexture("/textures/magic8ball-bottom.jpg");
+    const modelData: GLTF = await loadModel("/models/magic8ball2.glb");
+    const topTexture: THREE.Texture = await loadTexture("/textures/magic8ball-top.jpg");
+    const bottomTexture: THREE.Texture = await loadTexture("/textures/magic8ball-bottom.jpg");
     bottomTexture.colorSpace = THREE.SRGBColorSpace;
     bottomTexture.flipY = false;
-    const dieTexture = await loadTexture("/textures/magic8ball-die.jpg");
+    const dieTexture: THREE.Texture = await loadTexture("/textures/magic8ball-die.jpg");
     dieTexture.flipY = false;
-    const envMap: any = await loadEnv("/envs/empty_warehouse_01_1k.hdr");
+    const envMap: THREE.Texture = await loadEnv("/envs/empty_warehouse_01_1k.hdr");
     envMap.mapping = THREE.EquirectangularReflectionMapping;
 
     const ball = modelData.scene;
@@ -315,7 +315,7 @@ const Magic8Ball: React.FC = () => {
   return (
     <div className="relative w-screen h-screen">
       {/* Form container using Tailwind classes for absolute positioning */}
-      <div className="absolute bottom-[100px] w-full z-50" >
+      <div className="absolute bottom-[100px] w-full z-50">
         <div className="flex space-x-4 w-full flex items-center justify-center">
           <input
             type="text"
@@ -328,7 +328,7 @@ const Magic8Ball: React.FC = () => {
               }
             }}
             className="p-2 border border-gray-300 w-3/5 max-w-[500px] px-8 py-4 text-black font-rubik rounded-full"
-            />
+          />
           <button
             className="font-[700] font-rubik p-2 px-8 py-4 text-xl w-fit border-none rounded-full uppercase transition-colors bg-[#ffd000] text-[#440031] hover:bg-[#fff720] hover:text-[#440031]"
             onClick={handleAsk}
