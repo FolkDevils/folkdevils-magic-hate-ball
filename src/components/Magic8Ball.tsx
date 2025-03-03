@@ -8,12 +8,13 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import gsap from "gsap";
 
 // Define a custom interface for the GLTF result.
+// Replaced 'any' with 'unknown' for asset extras.
 interface GLTFResult {
   scene: THREE.Scene;
   scenes: THREE.Scene[];
   animations: THREE.AnimationClip[];
   cameras: THREE.Camera[];
-  asset: { version: string; [key: string]: any };
+  asset: { version: string; [key: string]: unknown };
 }
 
 const Magic8Ball: React.FC = () => {
