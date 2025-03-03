@@ -481,7 +481,7 @@ const Magic8Ball: React.FC = () => {
       {/* Three.js canvas container */}
       <div
         ref={containerRef}
-        className="absolute top-[-50px] left-0 w-full h-full z-0 pointer-events-none"
+        className="absolute top-[-50px] left-0 w-full h-full z-0"
       />
     </div>
   );
