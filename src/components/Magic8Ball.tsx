@@ -96,6 +96,104 @@ const Magic8Ball: React.FC = () => {
   const validOrientations: THREE.Quaternion[] = [
     new THREE.Quaternion().setFromEuler(
       new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(17),
+        THREE.MathUtils.degToRad(180)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(90),
+        THREE.MathUtils.degToRad(180)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(161),
+        THREE.MathUtils.degToRad(180)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(231),
+        THREE.MathUtils.degToRad(180)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(305),
+        THREE.MathUtils.degToRad(180)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(17),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(90),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(161),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(231),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(140),
+        THREE.MathUtils.degToRad(305),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(75),
+        THREE.MathUtils.degToRad(55),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(75),
+        THREE.MathUtils.degToRad(127),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(75),
+        THREE.MathUtils.degToRad(198),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        THREE.MathUtils.degToRad(75),
+        THREE.MathUtils.degToRad(270),
+        THREE.MathUtils.degToRad(0)
+      )
+    ),
+    new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
         THREE.MathUtils.degToRad(75),
         THREE.MathUtils.degToRad(340),
         THREE.MathUtils.degToRad(0)
