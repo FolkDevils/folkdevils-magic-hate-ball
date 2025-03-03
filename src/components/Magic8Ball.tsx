@@ -36,19 +36,51 @@ const Magic8Ball: React.FC = () => {
   // State for the question input
   const [question, setQuestion] = useState("");
 
-  // Loader helper functions with explicit types
+  // Loader helper functions with explicit types and annotated callbacks
   const loadModel = (url: string): Promise<GLTFResult> =>
-    new Promise((resolve, reject) => {
-      new GLTFLoader().load(url, resolve, undefined, reject);
-    });
+    new Promise<GLTFResult>(
+      (
+        resolve: (result: GLTFResult) => void,
+        reject: (reason: unknown) => void
+      ) => {
+        new GLTFLoader().load(
+          url,
+          (gltf: GLTFResult) => resolve(gltf),
+          undefined,
+          reject
+        );
+      }
+    );
+
   const loadTexture = (url: string): Promise<THREE.Texture> =>
-    new Promise((resolve, reject) => {
-      new THREE.TextureLoader().load(url, resolve, undefined, reject);
-    });
+    new Promise<THREE.Texture>(
+      (
+        resolve: (texture: THREE.Texture) => void,
+        reject: (reason: unknown) => void
+      ) => {
+        new THREE.TextureLoader().load(
+          url,
+          (texture: THREE.Texture) => resolve(texture),
+          undefined,
+          reject
+        );
+      }
+    );
+
   const loadEnv = (url: string): Promise<THREE.Texture> =>
-    new Promise((resolve, reject) => {
-      new RGBELoader().load(url, resolve, undefined, reject);
-    });
+    new Promise<THREE.Texture>(
+      (
+        resolve: (texture: THREE.Texture) => void,
+        reject: (reason: unknown) => void
+      ) => {
+        new RGBELoader().load(
+          url,
+          (texture: THREE.Texture) => resolve(texture),
+          undefined,
+          reject
+        );
+      }
+    );
 
   // Hard-coded initial orientation for the die.
   const initialOrientation = new THREE.Quaternion().setFromEuler(
@@ -224,7 +256,6 @@ const Magic8Ball: React.FC = () => {
       transparent: true,
     });
 
-    // Cast die as THREE.Mesh to set material.
     (die as THREE.Mesh).material = new THREE.MeshStandardMaterial({
       map: dieTexture,
       side: THREE.DoubleSide,
